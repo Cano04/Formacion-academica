@@ -1,0 +1,420 @@
+mysql> delimiter //
+mysql> CREATE PROCEDURE Conteo(OUT cant INT)
+    -> begin
+    -> SELECT COUNT(*) INTO cant FROM gente2.gente;
+    -> end
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter;
+    -> call Conteo(@c);
+    -> select @c AS No_Clientes;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter;call Conteo(@c);
+select @c AS No_Clientes' at line 1
+mysql> delimiter;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql> delimiter ;
+mysql> CALL Conteo(@c);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select @c AS No_Clientes;
++-------------+
+| No_Clientes |
++-------------+
+|        1000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> delimiter //
+mysql> CREATE PROCEDURE Busca (IN num_cte INT)
+    -> Begin
+    -> SELECT ID_Cliente, NombreFROM gente2.gente
+    -> where ID_Cliente=num_cte;
+    -> end
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.gente
+where ID_Cliente=num_cte;
+end' at line 3
+mysql> CREATE PROCEDURE Busca (IN num_cte INT)
+    -> Begin
+    -> SELECT ID_Cliente, NombreFROM gente2.gente
+    -> WHERE ID_Cliente=num_cte;
+    -> end
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.gente
+WHERE ID_Cliente=num_cte;
+end' at line 3
+mysql> CREATE PROCEDURE Busca (IN num_cte INT)
+    -> BEGIN
+    -> SELECT ID_Cliente, NombreFROM gente2.gente
+    -> WHERE ID_Cliente=num_cte;
+    -> end
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.gente
+WHERE ID_Cliente=num_cte;
+end' at line 3
+mysql> CREATE PROCEDURE Busca (IN num_cte INT)
+    -> BEGIN
+    -> SELECT NUM_PROG, NombreFROM gente2.gente
+    -> WHERE ID_Cliente=num_cte;
+    -> END
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.gente
+WHERE ID_Cliente=num_cte;
+END' at line 3
+mysql> DROP PROCEDURE BUSCA;
+    -> //
+ERROR 1305 (42000): PROCEDURE gente2.BUSCA does not exist
+mysql> CREATE PROCEDURE Busca (IN num_cte INT)
+    -> BEGIN
+    -> SELECT NUM_PROG, NombreFROM gente2.gente
+    -> WHERE NUM_PROG=num_cte;
+    -> END
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.gente
+WHERE NUM_PROG=num_cte;
+END' at line 3
+mysql>
+
+
+
+
+
+CREATE FUNCTION FACTORIAL(X INT) RETURNS INT(11)
+    BEGIN
+    DECLARE FACTORIAL INT;
+    SET FACTORIAL = X;
+    IF X<=0 THEN
+    RETURN 1;
+    END IF;
+    BUCLE: LOOP
+    SET X = X -1;
+    IF X<1 THEN
+    LEAVE BUCLE;
+    END IF;
+    SET FACTORIAL = FACTORIAL *X;
+    END LOOP BUCLE;
+    RETURN FACTORIAL;
+    END
+    //
+
+
+
+
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bdmecanico         |
+| consultas          |
+| directorio_jlcp    |
+| escuela            |
+| fprueba            |
+| fune               |
+| funeraria          |
+| gente2             |
+| j22070429          |
+| juancano_hospital  |
+| juancanodmn        |
+| mecanico           |
+| mysql              |
+| operaciones        |
+| performance_schema |
+| producto           |
+| prueba             |
+| seguridad          |
+| sys                |
+| videoclub          |
+| vistas             |
++--------------------+
+22 rows in set (0.00 sec)
+
+mysql> use gente2
+Database changed
+mysql> delimiter//
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter//' at line 1
+mysql> delimiter //
+mysql> create function Hello (s CHAR(20)) RETURNS CHAR(50)
+    -> RETURN CONCAT('HELLO, ',S,'!');
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> SELECT HELLO('WORLD');
++----------------+
+| HELLO('WORLD') |
++----------------+
+| HELLO, WORLD!  |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> delimiter //
+mysql> create function Hello (s CHAR(20)) RETURNS CHAR(50)
+    -> RETURN CONCAT('HOLA JUAN, ',S,'!');
+    -> //
+ERROR 1304 (42000): FUNCTION Hello already exists
+mysql> create function HOLA (s CHAR(20)) RETURNS CHAR(50)
+    -> RETURN CONCAT('HOLA JUAN, ',S,'!');
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> SELECT HOLA('WORLD');
++-------------------+
+| HOLA('WORLD')     |
++-------------------+
+| HOLA JUAN, WORLD! |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER //
+mysql> CREATE FUNCTION DIVIDE(DIVIDENDO INT, DIVISOR INT) RETURNS INT
+    -> BEGIN
+    -> DECLARE AUX INT;
+    -> DECLARE CONTADOR INT;
+    -> DECLARE RESTO INT;
+    -> SET CONTADOR =0;
+    -> SET AUX =0;
+    -> WHILE (AUX + DIVISOR) <= DIVIDENDO DO
+    -> SET AUX = AUX + DIVISOR;
+    -> SET CONTADOR = CONTADOR +1;
+    -> END WHILE;
+    -> SET RESTO = DIVIDENDO - AUX;
+    -> RETURN CONTADOR;
+    -> END;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT DIVIDE (6.4);
+    -> //
+ERROR 1318 (42000): Incorrect number of arguments for FUNCTION gente2.DIVIDE; expected 2, got 1
+mysql> DELIMITER ;
+mysql> SELECT DIVIDE (6);
+ERROR 1318 (42000): Incorrect number of arguments for FUNCTION gente2.DIVIDE; expected 2, got 1
+mysql> SELECT DIVIDE (6,4);
++--------------+
+| DIVIDE (6,4) |
++--------------+
+|            1 |
++--------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT DIVIDE (6,5) AS DIVIDE RESULTADO;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'RESULTADO' at line 1
+mysql> SELECT DIVIDE (6,5) AS DIVIDE_RESULTADO;
++------------------+
+| DIVIDE_RESULTADO |
++------------------+
+|                1 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER //
+mysql> CREATE FUCTION FACTORIAL(X INT) RETURN INT(11)
+    -> BEGIN
+    -> DECLARE FACTORIAL INT;
+    -> SET FACTORIAL = X;
+    -> IF X<=0 THEN
+    -> RETURN 1
+    -> END IF;
+    -> CONSECUTIVAS
+    -> BUCLE: LOOP
+    -> SET X = X -1;
+    -> IF X<1 THEN
+    -> LEAVE BUCLE;
+    -> END IF;
+    -> SET FACTORIAL = FACTORIAL *X;
+    -> END LOOP BUCLE;
+    -> RETURN FACTORIAL;
+    -> END
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FUCTION FACTORIAL(X INT) RETURN INT(11)
+BEGIN
+DECLARE FACTORIAL INT;
+SET FACTOR' at line 1
+mysql> CREATE FUNCTION FACTORIAL(X INT) RETURN INT(11)
+    -> BEGIN
+    -> DECLARE FACTORIAL INT;
+    -> IF X<=0 THEN
+    -> RETURN 1
+    -> END IF;
+    -> CONSECUTIVAS
+    -> BUCLE: LOOP
+    -> SET X = X -1;
+    -> IF X<1 THEN
+    -> LEAVE BUCLE;
+    -> END IF;
+    -> SET FACTORIAL = FACTORIAL *X;
+    -> END LOOP BUCLE;
+    -> RETURN FACTORIAL;
+    -> END
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'RETURN INT(11)
+BEGIN
+DECLARE FACTORIAL INT;
+IF X<=0 THEN
+RETURN 1
+END IF;
+CONSE' at line 1
+mysql> CREATE FUNCTION FACTORIAL(X INT) RETURNS INT(11)
+    ->     BEGIN
+    ->     DECLARE FACTORIAL INT;
+    ->     IF X<=0 THEN
+    ->     RETURN 1
+    ->     END IF;
+    ->     CONSECUTIVAS
+    ->     BUCLE: LOOP
+    ->     SET X = X -1;
+    ->     IF X<1 THEN
+    ->     LEAVE BUCLE;
+    ->     END IF;
+    ->     SET FACTORIAL = FACTORIAL *X;
+    ->     END LOOP BUCLE;
+    ->     RETURN FACTORIAL;
+    ->     END
+    ->     //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'END IF;
+    CONSECUTIVAS
+    BUCLE: LOOP
+    SET X = X -1;
+    IF X<1 THEN
+    L' at line 6
+mysql> CREATE FUNCTION FACTORIAL(X INT) RETURNS INT(11)
+    ->     BEGIN
+    ->     DECLARE FACTORIAL INT;
+    ->     IF X<=0 THEN
+    ->     RETURN 1;
+    ->     END IF;
+    ->     CONSECUTIVAS
+    ->     BUCLE: LOOP
+    ->     SET X = X -1;
+    ->     IF X<1 THEN
+    ->     LEAVE BUCLE;
+    ->     END IF;
+    ->     SET FACTORIAL = FACTORIAL *X;
+    ->     END LOOP BUCLE;
+    ->     RETURN FACTORIAL;
+    ->     END
+    ->     //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'BUCLE: LOOP
+    SET X = X -1;
+    IF X<1 THEN
+    LEAVE BUCLE;
+    END IF;
+    S' at line 8
+mysql> CREATE FUNCTION FACTORIAL(X INT) RETURNS INT(11)
+    ->     BEGIN
+    ->     DECLARE FACTORIAL INT;
+    ->     IF X<=0 THEN
+    ->     RETURN 1;
+    ->     END IF;
+    ->     BUCLE: LOOP
+    ->     SET X = X -1;
+    ->     IF X<1 THEN
+    ->     LEAVE BUCLE;
+    ->     END IF;
+    ->     SET FACTORIAL = FACTORIAL *X;
+    ->     END LOOP BUCLE;
+    ->     RETURN FACTORIAL;
+    ->     END
+    ->     //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT FACTORIAL (8,2)
+    -> ;
+    -> //
+ERROR 1318 (42000): Incorrect number of arguments for FUNCTION gente2.FACTORIAL; expected 1, got 2
+mysql> DELIMITER ;
+mysql> SELECT FACTORIAL (8,2);
+ERROR 1318 (42000): Incorrect number of arguments for FUNCTION gente2.FACTORIAL; expected 1, got 2
+mysql> SELECT FACTORIAL(8,2);
+ERROR 1318 (42000): Incorrect number of arguments for FUNCTION gente2.FACTORIAL; expected 1, got 2
+mysql> SELECT FACTORIAL(8);
++--------------+
+| FACTORIAL(8) |
++--------------+
+|         NULL |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FACTORIAL(3);
++--------------+
+| FACTORIAL(3) |
++--------------+
+|         NULL |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FACTORIAL(10);
++---------------+
+| FACTORIAL(10) |
++---------------+
+|          NULL |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> DROP FUCTION FACTORIAL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FUCTION FACTORIAL' at line 1
+mysql> DROP FUNCTION FACTORIAL;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER //
+mysql> CREATE FUNCTION FACTORIAL(X INT) RETURNS INT(11)
+    ->     BEGIN
+    ->     DECLARE FACTORIAL INT;
+    ->     SET FACTORIAL = *X;
+    ->     IF X<=0 THEN
+    ->     RETURN 1;
+    ->     END IF;
+    ->     BUCLE: LOOP
+    ->     SET X = X -1;
+    ->     IF X<1 THEN
+    ->     LEAVE BUCLE;
+    ->     END IF;
+    ->     SET FACTORIAL = FACTORIAL *X;
+    ->     END LOOP BUCLE;
+    ->     RETURN FACTORIAL;
+    ->     END
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*X;
+    IF X<=0 THEN
+    RETURN 1;
+    END IF;
+    BUCLE: LOOP
+    SET X = X -1;' at line 4
+mysql> CREATE FUNCTION FACTORIAL(X INT) RETURNS INT(11)
+    ->     BEGIN
+    ->     DECLARE FACTORIAL INT;
+    ->     SET FACTORIAL = X;
+    ->     IF X<=0 THEN
+    ->     RETURN 1;
+    ->     END IF;
+    ->     BUCLE: LOOP
+    ->     SET X = X -1;
+    ->     IF X<1 THEN
+    ->     LEAVE BUCLE;
+    ->     END IF;
+    ->     SET FACTORIAL = FACTORIAL *X;
+    ->     END LOOP BUCLE;
+    ->     RETURN FACTORIAL;
+    ->     END
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> SELECT FACTORIAL(10);
++---------------+
+| FACTORIAL(10) |
++---------------+
+|       3628800 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> DROP FUNCTION HELLO;}
+Query OK, 0 rows affected (0.00 sec)
+

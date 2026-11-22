@@ -1,0 +1,238 @@
+CREATE TABLE Clientes
+     (
+     ID_CLIENTE           INT NOT NULL DEFAULT 0,
+     CLAVE                CHAR(4) NOT NULL,
+     NOMBRE               CHAR(255) NOT NULL,
+     DOMICILIO            CHAR(255) NOT NULL,
+     CIUDAD               CHAR(255),
+     ESTADO               CHAR(50), NOT NULL DEFAULT 'SAN LUIS POTOS ',
+     ESTATUS              ENUM('ALTA', 'BAJA') NOT NULL DEFAULT 'ALTA',
+     KEY (CLAVE),
+     KEY (ID_CLIENTE),
+     PRIMARY KEY (ID_CLIENTE)
+     )ENGINE=INNODB;
+
+INSERT INTO Clientes
+VALUES (
+     1, 
+     'C001', 
+     'RODRIGO ESPARZA DUQUE', 
+     'AV. RICARDO B. ANAYA 1720', 
+     'SAN LUIS POTOS ', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     2, 
+     'C002', 
+     'GABRIEL LOPEZ AGUILAR', 
+     'DOM CONOCIDO', 
+     'CIUDAD VALLES', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     3, 
+     'C003', 
+     'ERNESTO TINAJERO VARGAS', 
+     'DOM. CONOCIDO', 
+     'TAMAZUNCHALE', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     4, 
+     'C004', 
+     'ALBERTO LARA SILVERIO', 
+     'AV. LOPEZ HEMOSA S/N', 
+     'TAMAZUNCHALE', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     5, 
+     'C005', 
+     'DANIEL LIRA ALVARADO', 
+     'AV. V CARRANZA', 
+     'SAN LUIS POTOS ', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     6, 
+     'C006', 
+     'ALBERTO LUNA LOPEZ', 
+     'MONTES APALACHES 240', 
+     'SAN LUIS POTOS ', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     7, 
+     'C007', 
+     'GILBERTO ALCANTARA TORRES', 
+     'RANCHO EJIDAL', 
+     'CIUDAD VALLES', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     8, 
+     'C008', 
+     'BENITO ESPINOZA NIETO', 
+     'AV. CACTUS 1562', 
+     'SOLEDAD DE GRACIANO SANCHEZ', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     9, 
+     'C009', 
+     'RAQUEL OLMEDO LOPEZ', 
+     'ESTACION CATORCE 1450', 
+     'RIO VERDE', 
+     'SAN LUIS POTOS ', 
+     'ALTA' )\g
+
+
+CREATE TABLE Empleados
+     (
+     ID_EMPLEADO          INT NOT NULL DEFAULT 0,
+     CLAVE                CHAR(4) NOT NULL,
+     NOMBRE               CHAR(255) NOT NULL,
+     RFC                  CHAR(10),
+     DOMICILIO            CHAR(255) NOT NULL,
+     CIUDAD               CHAR(50) NOT NULL DEFAULT 'SAN LUIS POTOS ',
+     ESTATUS              ENUM('LABORANDO', 'DESPEDIDO') NOT NULL DEFAULT 'LABORANDO',
+     KEY (ID_EMPLEADO),
+     PRIMARY KEY (ID_EMPLEADO)
+     )ENGINE=INNODB\g
+
+INSERT INTO Empleados
+VALUES (
+     1, 
+     'E001', 
+     'MIGUEL ORTEGA GARCIA', 
+     'MGHF701206', 
+     'AV. UNIVERSIDAD 1860', 
+     'SAN LUIS POTOS ', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     2, 
+     'E002', 
+     'JOSE LUIS GOVEA SALAZAR', 
+     'JKTG750125', 
+     'AV. HIMNO NACIONAL 4520', 
+     'SAN LUIS POTOS ', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     3, 
+     'E003', 
+     'JAVIER ARTEAGA SANTOS', 
+     'DFGT650321', 
+     'FRANCIA 480', 
+     'SAN LUIS POTOS ', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     4, 
+     'E004', 
+     'EDGAR LOPEZ ALVAREZ', 
+     'ELAD771105', 
+     'CARR RIO VERDE S/N', 
+     'SAN LUIS POTOS ', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     5, 
+     'E005', 
+     'IVAN ESTRADA ONTIVEROS', 
+     'IEOT800611', 
+     'AV. INDUSTRIAS 1230', 
+     'SAN LUIS POTOS ', 
+     'LABORANDO' )\g
+
+
+CREATE TABLE OrdenTrabajo
+     (
+     ID_OT                INT NOT NULL DEFAULT 0,
+     ID_CLIENTE           INT NOT NULL DEFAULT 0,
+     ID_EMPLEADO          INT NOT NULL DEFAULT 0,
+     CLAVE_OT             CHAR(4) NOT NULL,
+     TIPO_AUTO            CHAR(255) NOT NULL,
+     FALLA                CHAR(255),
+     FECHA_SOLICITUD      DATETIME,
+     PRECIO_FINAL         DOUBLE(15,2) DEFAULT '0.00',
+     ESTATUS              ENUM('ABIERTA', 'CERRADA') NOT NULL DEFAULT 'ABIERTA',
+     PRIMARY KEY (ID_OT),     
+     INDEX(ID_CLIENTE, ID_EMPLEADO),
+     FOREIGN KEY (ID_CLIENTE) REFERENCES Clientes(ID_CLIENTE),
+     FOREIGN KEY (ID_EMPLEADO) REFERENCES Empleados(ID_EMPLEADO)
+     ON UPDATE CASCADE ON DELETE RESTRICT
+     )ENGINE=INNODB\g
+
+mysql> select @@autocommit;
+
+mysql> SET autocommit=0;
+
+INSERT INTO clientes (id_cliente, clave, nombre, domicilio, ciudad, estado, estatus)
+VALUES (2, 'A001', 'Juan Cano Padron', 'barrio de santiago', 'SAN LUIS POTOSI ', 'SAN LUIS POTOSI', 'ALTA')
+
+Consultar las nuevas inserciones
+SELECT * FROM clientes WHERE clave LIKE 'A%';
+SELECT * FROM empleados WHERE clave LIKE 'B%';
+
+COMMIT;
+
+START TRANSACTION;
+
+UPDATE clientes
+SET estatus = 'BAJA'
+WHERE clave LIKE 'A%';
+
+UPDATE empleados
+SET ciudad = 'CIUDAD VALLES'
+WHERE clave LIKE 'E%';
+
+SELECT * FROM clientes WHERE clave LIKE 'A%';
+SELECT * FROM empleados WHERE clave LIKE 'E%';
+
+START TRANSACTION;
+
+UPDATE clientes
+SET estatus = 'BAJA'
+WHERE clave LIKE 'A%';
+
+UPDATE empleados
+SET ciudad = 'CIUDAD VALLES'
+WHERE clave LIKE 'E%';
+
+SELECT * FROM clientes WHERE clave LIKE 'A%';
+SELECT * FROM empleados WHERE clave LIKE 'E%';
+
+COMMIT;
+
+SET autocommit = 1;
+
+INSERT INTO ordentrabajo (id_ot, id_cliente, id_empleado, clave_ot, tipo_auto, falla, fecha_solicitud, precio_final, estatus)
+VALUES (1, 10, 5, 'OT01', 'Sedan', 'Falla en el motor', '2024-10-28', 1500, 'ABIERTA'),
+       (2, 11, 6, 'OT02', 'SUV', 'Cambio de transmicion', '2024-10-28', 2000, 'CERRADA');
+
+SELECT * FROM ordentrabajo;
+SELECT * FROM Clientes;
+SELECT * FROM Empleados;
+

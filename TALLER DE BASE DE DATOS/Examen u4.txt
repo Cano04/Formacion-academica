@@ -1,0 +1,49 @@
+mysql> CREATE USER Examen IDENTIFIED BY 'exu3u4';
+
+mysql> GRANT SELECT, UPDATE ON Mecanico.* TO Examen IDENTIFIED BY 'exau3u4';
+
+ GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP ON mecanico
+.* TO Examen IDENTIFIED BY 'exu3u4';
+
+INSERT INTO Empleados
+VALUES (
+     19, 
+     'E019', 
+     'MIGUEL ORTEGA GARCIA', 
+     'MGHF701206', 
+     'AV. UNIVERSIDAD 1860', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     20, 
+     'E020', 
+     'MIGUEL ORTEGA GARCIA', 
+     'MGHF701206', 
+     'AV. UNIVERSIDAD 1860', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     21, 
+     'E021', 
+     'MIGUEL ORTEGA GARCIA', 
+     'MGHF701206', 
+     'AV. UNIVERSIDAD 1860', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+ SET autocommit = 0;
+
+INSERT INTO OrdenTrabajo VALUES
+(16,16,16,'016','CHEVY POP','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+
+INSERT INTO OrdenTrabajo VALUES
+(17,17,17,'017','CHEVY POP','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+
+INSERT INTO OrdenTrabajo VALUES
+(18,18,18,'018','CHEVY POP','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+
+

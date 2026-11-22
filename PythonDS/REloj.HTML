@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title> + + + R E L O J + + + </title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .reloj-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            width: 320px;
+        }
+
+        .reloj-container h1 {
+            margin-bottom: 20px;
+            color: #1e3c72;
+        }
+
+        #hora {
+            font-size: 60px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #000;
+        }
+
+        #fecha {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: #1e3c72;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #2a5298;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reloj-container">
+        <h1>Reloj Digital</h1>
+        <div id="hora">00:00:00</div>
+        <div id="fecha">Cargando fecha...</div>
+        <button onclick="cambiarFormato()">Cambiar Formato 12h / 24h</button>
+    </div>
+
+    <script>
+        let formato24 = true;
+
+        function actualizarReloj() {
+            const ahora = new Date();
+
+            let horas = ahora.getHours();
+            let minutos = ahora.getMinutes();
+            let segundos = ahora.getSeconds();
+            let ampm = "";
+
+            if (!formato24) {
+                ampm = horas >= 12 ? " PM" : " AM";
+                horas = horas % 12;
+                horas = horas ? horas : 12;
+            }
+
+            horas = horas.toString().padStart(2, "0");
+            minutos = minutos.toString().padStart(2, "0");
+            segundos = segundos.toString().padStart(2, "0");
+
+            document.getElementById("hora").innerHTML =
+                horas + ":" + minutos + ":" + segundos + ampm;
+
+            const opcionesFecha = {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            };
+
+            document.getElementById("fecha").innerHTML =
+                ahora.toLocaleDateString("es-MX", opcionesFecha);
+        }
+
+        function cambiarFormato() {
+            formato24 = !formato24;
+        }
+
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+    </script>
+
+</body>
+</html>

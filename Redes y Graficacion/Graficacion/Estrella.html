@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESTRELLA</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Escena, cámara y renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Crear un plano con cuadros
+        const gridSize = 20; // Tamaño del grid
+        const divisions = 20; // Número de divisiones
+        const gridHelper = new THREE.GridHelper(gridSize, divisions);
+        scene.add(gridHelper);
+
+        // Cambiar el color de las líneas centrales a rojo
+        const gridMaterial = gridHelper.material;
+        gridMaterial.color.set(0xffffff); // Color base de las líneas (blanco)
+
+        // Obtener la geometría del gridHelper
+        const gridGeometry = gridHelper.geometry;
+
+        // Cambiar el color de las líneas centrales
+        const colors = [];
+        const colorCenter = new THREE.Color(0xff0000); // Rojo para las líneas centrales
+        const colorDefault = new THREE.Color(0xffffff); // Blanco para el resto
+
+        for (let i = 0; i < gridGeometry.attributes.position.count; i++) {
+            if (
+                Math.abs(gridGeometry.attributes.position.getX(i)) < 0.001 || // Línea vertical central
+                Math.abs(gridGeometry.attributes.position.getZ(i)) < 0.001    // Línea horizontal central
+            ) {
+                colors.push(colorCenter.r, colorCenter.g, colorCenter.b);
+            } else {
+                colors.push(colorDefault.r, colorDefault.g, colorDefault.b);
+            }
+        }
+
+        // Asignar los colores a la geometría
+        gridGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        gridMaterial.vertexColors = true; // Habilitar el uso de colores por vértice
+
+        // Crear una línea vertical verde en la parte superior
+        const lineGeometry = new THREE.BufferGeometry();
+        const points = [
+            new THREE.Vector3(0, 0, 0), // Punto en el centro
+            new THREE.Vector3(0, gridSize / 2, 0)  // Punto superior
+        ];
+        lineGeometry.setFromPoints(points);
+
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 }); // Color verde
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        scene.add(line);
+
+        // Crear estrella de cuatro picos (más grande)
+        const starGeometry = new THREE.BufferGeometry();
+        const scaleFactor = 2.5; // Factor para hacer la estrella más grande
+
+        const starPoints = [
+            new THREE.Vector3(0 * scaleFactor, 3 * scaleFactor, 0),    // Pico superior
+            new THREE.Vector3(1 * scaleFactor, 1 * scaleFactor, 0),    // Diagonal superior-derecha
+            new THREE.Vector3(3 * scaleFactor, 1 * scaleFactor, 0),    // Pico derecho
+            new THREE.Vector3(1 * scaleFactor, -0.5 * scaleFactor, 0),   // Diagonal inferior-derecha
+            new THREE.Vector3(2 * scaleFactor, -3 * scaleFactor, 0),   // Pico Inferior derecho
+            new THREE.Vector3(0 * scaleFactor, -1 * scaleFactor, 0),  // Diagonal de enmedio
+            new THREE.Vector3(-2 * scaleFactor, -3 * scaleFactor, 0),  // Pico inferior izquierdo
+            new THREE.Vector3(-1 * scaleFactor, -0.5 * scaleFactor, 0),  
+            new THREE.Vector3(-3 * scaleFactor, 1 * scaleFactor, 0),  //
+            new THREE.Vector3(-1 * scaleFactor, 1 * scaleFactor, 0),    //
+            new THREE.Vector3(0 * scaleFactor, 3 * scaleFactor, 0)     //
+
+
+        ];
+        starGeometry.setFromPoints(starPoints);
+
+        // Estrella azul
+        const starMaterialAzul = new THREE.LineBasicMaterial({ color: 0x0000ff });
+        const starAzul = new THREE.Line(starGeometry, starMaterialAzul);
+        scene.add(starAzul);
+
+        // Variables para controlar la rotación
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        // Eventos para rotar el plano con el mouse
+        document.addEventListener('mousedown', () => isDragging = true);
+        document.addEventListener('mouseup', () => isDragging = false);
+        document.addEventListener('mousemove', (event) => {
+            if (isDragging) {
+                const deltaX = event.clientX - previousMousePosition.x;
+                const deltaY = event.clientY - previousMousePosition.y;
+
+                gridHelper.rotation.x += deltaY * 0.01;
+                gridHelper.rotation.y += deltaX * 0.01;
+                line.rotation.x += deltaY * 0.01;
+                line.rotation.y += deltaX * 0.01;
+                starAzul.rotation.x += deltaY * 0.01;
+                starAzul.rotation.y += deltaX * 0.01;
+            }
+            previousMousePosition = { x: event.clientX, y: event.clientY };
+        });
+
+        // Cambiar el tamaño de los elementos con teclado (+ o -)
+        document.addEventListener('keydown', (event) => {
+            if (event.key === '+' || event.key === '-') {
+                const scaleFactorKey = (event.key === '+') ? 1.1 : 0.9;
+                gridHelper.scale.multiplyScalar(scaleFactorKey);
+                line.scale.multiplyScalar(scaleFactorKey);
+                starAzul.scale.multiplyScalar(scaleFactorKey);
+            }
+        });
+
+        // Posicionar la cámara
+        camera.position.set(0, 5, 15);
+        camera.lookAt(scene.position);
+
+        // Función de animación
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Manejar el redimensionamiento de la ventana
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

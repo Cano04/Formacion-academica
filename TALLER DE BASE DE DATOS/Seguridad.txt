@@ -1,0 +1,199 @@
+CREATE TABLE Seguridad;
+
+USE Seguridad;
+
+CREATE TABLE Clientes
+     (
+     ID_CLIENTE           INT NOT NULL DEFAULT 0,
+     CLAVE                CHAR(4) NOT NULL,
+     NOMBRE               CHAR(255) NOT NULL,
+     DOMICILIO            CHAR(255) NOT NULL,
+     CIUDAD               CHAR(255),
+     ESTADO               CHAR(50) NOT NULL DEFAULT 'SAN LUIS POTOSÍ',
+     ESTATUS              ENUM('ALTA', 'BAJA') NOT NULL DEFAULT 'ALTA',
+     KEY (CLAVE),
+     KEY (ID_CLIENTE),
+     PRIMARY KEY (ID_CLIENTE)
+     );
+
+INSERT INTO Clientes
+VALUES (
+     1, 
+     'C001', 
+     'RODRIGO ESPARZA DUQUE', 
+     'AV. RICARDO B. ANAYA 1720', 
+     'SAN LUIS POTOSÍ', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     2, 
+     'C002', 
+     'GABRIEL LOPEZ AGUILAR', 
+     'DOM CONOCIDO', 
+     'CIUDAD VALLES', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     3, 
+     'C003', 
+     'ERNESTO TINAJERO VARGAS', 
+     'DOM. CONOCIDO', 
+     'TAMAZUNCHALE', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     4, 
+     'C004', 
+     'ALBERTO LARA SILVERIO', 
+     'AV. LOPEZ HEMOSA S/N', 
+     'TAMAZUNCHALE', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     5, 
+     'C005', 
+     'DANIEL LIRA ALVARADO', 
+     'AV. V CARRANZA', 
+     'SAN LUIS POTOSÍ', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     6, 
+     'C006', 
+     'ALBERTO LUNA LOPEZ', 
+     'MONTES APALACHES 240', 
+     'SAN LUIS POTOSÍ', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     7, 
+     'C007', 
+     'GILBERTO ALCANTARA TORRES', 
+     'RANCHO EJIDAL', 
+     'CIUDAD VALLES', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     8, 
+     'C008', 
+     'BENITO ESPINOZA NIETO', 
+     'AV. CACTUS 1562', 
+     'SOLEDAD DE GRACIANO SANCHEZ', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+INSERT INTO Clientes
+VALUES (
+     9, 
+     'C009', 
+     'RAQUEL OLMEDO LOPEZ', 
+     'ESTACION CATORCE 1450', 
+     'RIO VERDE', 
+     'SAN LUIS POTOSÍ', 
+     'ALTA' );
+
+
+CREATE TABLE Empleados
+     (
+     ID_EMPLEADO          INT NOT NULL DEFAULT 0,
+     CLAVE                CHAR(4) NOT NULL,
+     NOMBRE               CHAR(255) NOT NULL,
+     RFC                  CHAR(10),
+     DOMICILIO            CHAR(255) NOT NULL,
+     CIUDAD               CHAR(50) NOT NULL DEFAULT 'SAN LUIS POTOSÍ',
+     ESTATUS              ENUM('LABORANDO', 'DESPEDIDO') NOT NULL DEFAULT 'LABORANDO',
+     KEY (ID_EMPLEADO),
+     PRIMARY KEY (ID_EMPLEADO)
+     );
+
+INSERT INTO Empleados
+VALUES (
+     1, 
+     'E001', 
+     'MIGUEL ORTEGA GARCIA', 
+     'MGHF701206', 
+     'AV. UNIVERSIDAD 1860', 
+     'SAN LUIS POTOSÍ', 
+     'LABORANDO' );
+
+INSERT INTO Empleados
+VALUES (
+     2, 
+     'E002', 
+     'JOSE LUIS GOVEA SALAZAR', 
+     'JKTG750125', 
+     'AV. HIMNO NACIONAL 4520', 
+     'SAN LUIS POTOSÍ', 
+     'LABORANDO' );
+
+INSERT INTO Empleados
+VALUES (
+     3, 
+     'E003', 
+     'JAVIER ARTEAGA SANTOS', 
+     'DFGT650321', 
+     'FRANCIA 480', 
+     'SAN LUIS POTOSÍ', 
+     'LABORANDO' );
+
+INSERT INTO Empleados
+VALUES (
+     4, 
+     'E004', 
+     'EDGAR LOPEZ ALVAREZ', 
+     'ELAD771105', 
+     'CARR RIO VERDE S/N', 
+     'SAN LUIS POTOSÍ', 
+     'LABORANDO' );
+
+INSERT INTO Empleados
+VALUES (
+     5, 
+     'E005', 
+     'IVAN ESTRADA ONTIVEROS', 
+     'IEOT800611', 
+     'AV. INDUSTRIAS 1230', 
+     'SAN LUIS POTOSÍ', 
+     'LABORANDO' );
+
+
+CREATE TABLE OrdenTrabajo
+     (
+     ID_OT                INT NOT NULL DEFAULT 0,
+     ID_CLIENTE           INT NOT NULL DEFAULT 0,
+     ID_EMPLEADO          INT NOT NULL DEFAULT 0,
+     CLAVE_OT             CHAR(4) NOT NULL,
+     AUTO                 CHAR(255) NOT NULL,
+     FALLA                CHAR(255),
+     FECHA_SOLICITUD      DATE,
+     PRECIO_FINAL         DOUBLE(15,2) DEFAULT '0.00',
+     ESTATUS              ENUM('ABIERTA', 'CERRADA') NOT NULL DEFAULT 'ABIERTA',
+     PRIMARY KEY (ID_OT),
+     INDEX (ID_CLIENTE,ID_EMPLEADO),
+     FOREIGN KEY (ID_CLIENTE) REFERENCES CLIENTES(ID_CLIENTE),
+     FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADOS(ID_EMPLEADO)
+     ON UPDATE CASCADE ON DELETE RESTRICT
+     );
+
+INSERT INTO OrdenTrabajo VALUES
+(1,1,1,'001','CHEVY POP','Servicio','2007-05-03',4200.00,DEFAULT);
+
+INSERT INTO OrdenTrabajo VALUES
+(2,2,2,'002','VW','Afinación','2007-05-03',3100.00,DEFAULT);
+
+INSERT INTO OrdenTrabajo VALUES
+(3,3,3,'003','JETTA','Carburador','2007-05-03',1520.00,DEFAULT);

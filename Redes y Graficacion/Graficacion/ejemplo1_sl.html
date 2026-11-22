@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>SpotLight - Iluminacion y Sombreado</title>
+
+    <!--  Libreria Threejs  -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Libreria para Controles Orbit -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- Libreria Controles GUI -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+</head>
+
+    <body>
+        <script type="text/javascript">
+
+            function init() {
+                /*************** Crear Escena [Scene] ************************/
+                var escena = new THREE.Scene();
+
+                /*************** Crear Renderer [WebGLRenderer] **************/
+                var renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x848484);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+                /************** Crear Camara [PerspectiveCamera] *************/
+                var camara = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camara.position.set(50, 50, 50);
+                camara.lookAt(escena.position);
+
+                document.body.appendChild(renderer.domElement);
+
+                //Crear Ejes de Ayuda [AxesHelper]
+                var ejes = new THREE.AxesHelper(40);
+                escena.add(ejes);
+
+                //Crear Controles Orbit
+                var controlesO = new THREE.OrbitControls(camara, renderer.domElement);
+
+                //Crear Cuadriculas [GridHelper]
+                var grid_1 = new THREE.GridHelper(100, 20, 0x00ff00, 0xffffff);
+                var grid_2 = new THREE.GridHelper(100, 20, 0x00ff00, 0xffffff);
+                grid_2.rotation.x = Math.PI / 2;
+                //escena.add(grid_1);
+                escena.add(grid_2);
+
+                //Textura (Base)
+                var baseText = new THREE.TextureLoader().load("img/madera1.jpg");
+                baseText.wrapS = baseText.wrapT = THREE.RepeatWrapping;
+                baseText.repeat.set(1, 1);
+
+                //Base (Plano)
+                var baseGeom = new THREE.PlaneGeometry(100, 100);
+                var baseMat = new THREE.MeshLambertMaterial({ map: baseText, side: THREE.DoubleSide });
+                var base = new THREE.Mesh(baseGeom, baseMat);
+                base.rotation.x = -0.5 * Math.PI;
+                base.receiveShadow = true;
+                escena.add(base);
+
+                //TorusKnot
+                var geomTorusKnot = new THREE.TorusKnotGeometry(10, 2, 200, 20, 2, 3);
+                var matTorusKnot = new THREE.MeshPhongMaterial({
+                    color: 0x1b9bdc,
+                    emissive: 0xc31818,
+                    specular: 0xffff00, 
+                    shininess: 50,
+                    wireframe: false,
+                    transparent: false,
+                    opacity: 0.8,
+                    side: THREE.DoubleSide
+                });
+                var torusKnot = new THREE.Mesh(geomTorusKnot, matTorusKnot);
+                torusKnot.position.set(0, 20, 10);
+                torusKnot.castShadow = true;
+                escena.add(torusKnot); 
+
+                //Fuente de Luz
+                var spotLight = new THREE.SpotLight(0xffffff, 0.9);
+                spotLight.position.set(40, 60, -10);
+                spotLight.castShadow = true;
+                escena.add(spotLight);
+
+                var spotLightHelper = new THREE.SpotLightHelper(spotLight);
+                escena.add(spotLightHelper);
+
+
+                /**
+                 * /CONTROLES GUI
+                 */
+                var controlesGUI = new function ()
+                {
+                   //Variables para el material
+                    this.color = matTorusKnot.color.getStyle();
+                    this.emissive = matTorusKnot.emissive.getStyle();
+                    this.specular = matTorusKnot.specular.getStyle();
+                    this.shininess = 50;
+                    this.alambrado = true;
+                    this.transparencia = true;
+                    this.opacidad = 0.8;
+
+                    //Mover la Luz
+                    this.moverLuzX = 40;
+                    this.moverLuzY = 60;
+                    this.moverLuzZ = -10;
+                };
+
+                //Crear Interfaz
+                var Interfaz = new dat.GUI();
+
+                //Sub-interfaz (Material)
+                var Material = Interfaz.addFolder("Material Phong");
+                Material.addColor(controlesGUI, 'color').onChange(function (e) { matTorusKnot.color.setStyle(e); });
+                Material.addColor(controlesGUI, 'emissive').onChange(function (e) { matTorusKnot.emissive.setStyle(e); });
+                Material.addColor(controlesGUI, 'specular').onChange(function (e) { matTorusKnot.specular.setStyle(e); });
+                Material.add(controlesGUI, 'shininess', 0, 100).onChange(function (e) { matTorusKnot.shininess = e; });
+                Material.add(controlesGUI, 'alambrado').onChange(function (e) { matTorusKnot.wireframe = e; });
+                Material.add(controlesGUI, 'transparencia').onChange(function (e) { matTorusKnot.transparent = e; });
+                Material.add(controlesGUI, 'opacidad', 0, 1).onChange(function (e) { matTorusKnot.opacity = e; }); 
+
+                //Sub-interfaz (Luz - Traslacion)
+                var Luz = Interfaz.addFolder("Mover Luz");
+                Luz.add(controlesGUI, 'moverLuzX', -100, 100);
+                Luz.add(controlesGUI, 'moverLuzY', -100, 100);
+                Luz.add(controlesGUI, 'moverLuzZ', -100, 100);
+
+                var update = function ()
+                {
+                    torusKnot.rotation.y += 0.01;
+                    torusKnot.rotation.z += 0.01;
+
+                    spotLight.position.set(controlesGUI.moverLuzX, controlesGUI.moverLuzY, controlesGUI.moverLuzZ);
+                };
+
+                var render = function ()
+                {
+                    renderer.render(escena, camara);
+                };
+
+                var loop = function ()
+                {
+                    requestAnimationFrame(loop);
+                    update();
+                    render();
+                };
+
+                loop();
+
+            }
+            window.onload = init;
+        </script>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+**/build/
+**/dist/
+**/nbbuild/
+**/nbdist/
+**/nbproject/private/
+*.class
+*~
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.env
+*credentials*
+Thumbs.db
+desktop.ini

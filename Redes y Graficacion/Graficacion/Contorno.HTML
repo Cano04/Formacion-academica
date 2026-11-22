@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8";
+    <meta name="viewport" content="device-width, initial-scale=1.0">
+    <title>Borde punto por punto</title>
+    <style>
+        canvas{
+            background-color: rgb(172, 223, 50);
+        }
+    </style>
+</head>
+
+
+    <body> 
+        <canvas id="miCanvas" width="400" height="200"></canvas>
+
+        <script>
+            const canvas = document.getElementById('miCanvas');
+            const ctx = canvas.getContext('2d');
+            function dibujaPunto(x,y){
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x, y, 2, 2);
+            }
+
+            function dibujaBorde(){
+                const espacio = 15; //Espacio entre puntos
+                const width = canvas.width; //Ancho del borde
+                const height = canvas.height; //Alto del borde
+
+
+            //borde superior
+            for (let x = 0; x < width; x += espacio) {
+                dibujaPunto(x,0);
+            }
+
+            //Borde inferior
+            for (let x = 0; x < width; x += espacio) {
+                dibujaPunto(x, height-2);
+            }
+
+            //Borde derecho
+            for (let y = 0; y < height; y += espacio) {
+                dibujaPunto(width-2, y);
+            }
+
+            //Borde izquierdo
+            for (let y = 0; y < height; y += espacio) {
+                dibujaPunto(0, y);
+        
+        }
+
+        dibujaBorde();
+            
+
+
+
+        </script>
+    </body>
+
+</html>

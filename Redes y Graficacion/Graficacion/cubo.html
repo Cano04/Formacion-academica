@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta cahrset="UTF-8">
+        <meta name="viewport" content="width=devidce-width, initial-scale=1.0">
+        <title> Hola Cubo</title>
+    </head>
+
+    <body> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+        <script>
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000)
+            scene.fog = new THREE.Fog(0x766445c,0.1,8);
+
+            var cargar = new THREE.TextureLoader();
+            cargar.load('./background.jpg',function(texture){
+                scene.background = texture;
+            })
+        
+            var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight, 0.1, 100);
+
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            var geometry = new THREE.BoxGeometry(1,1,1);
+            var material = new THREE.MeshBasicMaterial({color: 0xfcfcfc}); //color: 0xfcfcfc, wireframe: true
+            var cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            camera.position.z = 5;
+
+            var animate = function () {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+            renderer.render(scene,camera);
+            }
+            animate();
+
+
+
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+Unidad 2 (DML)
+
+Competencia de la unidad.
+Construye expresiones SQL para resolver necesidades de recuperación de información con las reglas sintácticas del lenguaje de manipulación de datos.
+
+Temas
+2.1 - Inspección eliminación y modificación de registros.
+2.2 - Consultas.
+2.3 - Construcción agrupamiento y ordenamiento.
+2.4 - Joins.
+2.5 - Subconsultas.
+2.6 - Operadores SET.
+2.7 - Vistas.
+
+
+
+

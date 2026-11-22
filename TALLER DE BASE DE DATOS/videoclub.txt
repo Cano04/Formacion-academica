@@ -1,0 +1,262 @@
+create database videoclub\g
+
+use videoclub\g
+
+CREATE TABLE cliente (
+  id_cliente int(11) NOT NULL AUTO_INCREMENT,
+  nombre_cliente varchar(30) DEFAULT NULL,
+  appat_cliente varchar(25) DEFAULT NULL,
+  apmat_cliente varchar(25) DEFAULT NULL,
+  fecnac_cliente date DEFAULT NULL,
+  mail_cliente varchar(100) DEFAULT NULL,
+  pass_cliente varchar(41) DEFAULT NULL,
+  Calle_cliente varchar(30) DEFAULT NULL,
+  numero_cliente varchar(10) DEFAULT NULL,
+  Colonia_cliente varchar(30) DEFAULT NULL,
+  PRIMARY KEY (id_cliente)
+)\g
+
+INSERT INTO cliente VALUES (1,'Juana Maria','Rodriguez ','Alvarado','1990-09-10','jmra@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Sauce','201','Balbuena'),(2,'Alfonso','Hernandez','Gonzalez','1990-02-23','alfonso10@','a51c10dba440a84da45f40f4c8e3fd54d1a483fa','Hidalgo','2000','Centro'),(3,'Luis','Salazar','Romero','1983-05-31','luis31@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Solar','123','Balbuena'),(4,'Karen','Moreno','Salazar','1969-03-15','Karen.moreno@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Circuito Central','12','Alceda'),(5,'Sofia','Rangel','Luna','1999-04-30','chikis30@hotmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Independencia','2046','Himno Nacional'),(7,'Ana','Briones','Saucedo','1975-03-14','anitabonita@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','San Silvestre','10','Arboleda'),(8,'Adrian','Hernandez','Martinez','1984-01-03','adhrmz@hotmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Aguamarina','201','Valle Dorado'),(9,'Daniela','Cervantes','Govea','2000-10-12','danigovea@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Muñoz','2012','Jardin'),(10,'Miriam','Rosales','Ramos','1998-11-23','miliram@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Educación','1950','Jardin'),(11,'Ana','Mendez','Flores','1980-01-23','agabymf@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','Esmeralda','100','Balbuena'),(12,'ana','m','g','2001-09-09','','e978d28d1ae5f02a531780d215093ca04ea05a4b','centro','23','Centro'),(13,'prueba','m','mk','2000-09-09','','e978d28d1ae5f02a531780d215093ca04ea05a4b','zaragoza','1234','hidalgo'),(14,'Peter','Pan','Con cafe','0000-01-01','peterforever@nuncajamas.com','5d0eb97e8e840e171f73b7642c2c89dd3984157b','Nunca Jamas','S/N','Nunca me olvides')\g
+
+
+CREATE TABLE usuarios (
+  id_usuario int(11) NOT NULL AUTO_INCREMENT,
+  nombre_usu varchar(30) NOT NULL,
+  ap_usuario varchar(30) NOT NULL,
+  am_usuario varchar(30) NOT NULL,
+  usu varchar(100) NOT NULL,
+  mail_usu varchar(255) NOT NULL,
+  password varchar(41) NOT NULL,
+  creado datetime NOT NULL,
+  PRIMARY KEY (id_usuario),
+  UNIQUE KEY usu (usu),
+  UNIQUE KEY mail_usu (mail_usu)
+)\g
+
+INSERT INTO usuarios VALUES (2,'Cesar Augusto','Villela','Muñoz','cesar_villela','cesarvillela@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','2017-04-02 09:17:23'),(3,'','','','','','da39a3ee5e6b4b0d3255bfef95601890afd80709','2017-04-02 10:43:06'),(7,'Jose','Perez','Lopez','jose_perez','jose@gmail.com','7110eda4d09e062aa5e4a390b0a572ac0d2c0220','2017-04-02 10:53:10'),(8,'1','1','1','1','1@gmail.com','356a192b7913b04c54574d18c28d46e6395428ab','2017-04-02 10:55:22'),(13,'2','2','2','2','2@hotmail.com','da4b9237bacccdf19c0760cab7aec4a8359010b0','2017-04-02 11:13:55'),(14,'ana','mendez','-','gaby','k@gmail.com','40bd001563085fc35165329ea1ff5c5ecbdbbeef','2018-10-09 14:35:01')\g
+
+CREATE TABLE tipo_pelicula(id_tipo int(10) NOT NULL AUTO_INCREMENT,
+  desc_tipo varchar(25) DEFAULT NULL, PRIMARY KEY (id_tipo)
+)\g
+
+INSERT INTO tipo_pelicula VALUES (1,'Terror'),(2,'Acción'),(3,'Comedia'),(4,'Romance'),(5,'Infantil'),(6,'Horror')\g
+
+CREATE TABLE tipo_pago (
+  id_tipo int(10) NOT NULL AUTO_INCREMENT,
+  forma_tipo varchar(30) DEFAULT NULL,
+  PRIMARY KEY (id_tipo)
+)\g
+
+CREATE TABLE pelicula (
+  id_pelicula int(11) NOT NULL AUTO_INCREMENT,
+  nombre_pelicula varchar(200) DEFAULT NULL,
+  tipo_pelicula int(10) DEFAULT NULL,
+  costo decimal(19,0) DEFAULT NULL,
+  PRIMARY KEY (id_pelicula),
+  KEY FKPelicula945317 (tipo_pelicula),
+  CONSTRAINT FKPelicula945317 FOREIGN KEY (tipo_pelicula) REFERENCES tipo_pelicula (id_tipo)
+)\g
+
+INSERT INTO pelicula VALUES (1,'El conjuro',6,30),(2,'El exorcista',6,20),(3,'Juego macabro',6,15),(4,'Halloween',6,15),(5,'El aro',6,15),(6,'El horfanato',6,20),(8,'Resident Evil',2,15),(9,'Why him?',3,20),(10,'Scary movie',3,15),(11,'Yo antes de ti',4,30),(12,'the notebook',4,20),(13,'Loving',4,20),(15,'Titanic',4,15),(16,'Logan',2,30)\g
+
+
+CREATE TABLE renta (
+  id_renta int(11) NOT NULL AUTO_INCREMENT,
+  id_cliente int(11) DEFAULT NULL,
+  id_pelicula int(11) DEFAULT NULL,
+  Fec_renta date DEFAULT NULL,
+  multa float DEFAULT NULL,
+  status enum('entregada','rentada') DEFAULT NULL,
+  PRIMARY KEY (id_renta),
+  KEY id_cliente (id_cliente),
+  KEY id_pelicula (id_pelicula)
+)\g
+
+INSERT INTO renta VALUES (1,1,8,'2017-03-14',NULL,'entregada'),(2,2,1,'2017-03-12',NULL,'rentada'),(3,4,9,'2017-03-13',NULL,'entregada'),(4,5,10,'2017-03-13',NULL,'entregada'),(5,3,12,'2017-03-14',NULL,'entregada'),(6,7,2,'2017-03-14',NULL,'rentada'),(7,8,7,'2017-03-15',NULL,'rentada'),(8,1,4,'2017-03-16',NULL,'rentada'),(9,11,12,'2017-03-16',NULL,'entregada'),(10,2,7,'2017-03-16',NULL,'rentada'),(11,2,13,'2017-03-17',NULL,'rentada'),(12,3,14,'2017-03-17',NULL,'rentada'),(13,4,15,'2017-03-17',NULL,'rentada'),(14,5,2,'2017-03-17',NULL,'rentada'),(15,6,5,'2017-03-18',NULL,'rentada'),(16,1,1,'2017-03-04',0,'rentada'),(17,11,15,'2017-03-29',0,'entregada'),(18,11,12,'2017-03-30',0,'rentada'),(19,11,3,'2017-03-04',0,'rentada'),(20,11,15,'2017-03-30',0,'entregada')\g
+
+
+mysql> INSERT INTO USUARIOS VALUES(
+    -> 17,
+    -> 'JAVIER',
+    -> 'ARCOS',
+    -> 'RIVERA',
+    -> 'TUMAMA',
+    -> 'JAVIER344@GMAIL.COM',
+    -> 'ESXRDCVTBGYNHUJMIOKIJNHUBGYFCTVG',
+    -> '2017-08-02 09:17:42');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO USUARIOS VALUES(
+    -> 19,
+    -> 'ALEXIS',
+    -> 'URIEL',
+    -> 'MENDOZA',
+    -> 'HOLA123',
+    -> 'ALEXIS193@GMAIL,COM',
+    -> 'SERDCVYGBTFRDEW3S4ERDTJINUHYGVFT',
+    -> '2017-11-02 10:17:42');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO USUARIOS VALUES(
+    -> 21,
+    -> 'MOISES',
+    -> 'LOPEZ',
+    -> 'JASSO',
+    -> 'ELNEGROOJAJA',
+    -> 'COMAL@GMAIL.COM',
+    -> 'W4ERTYUNI243546FYT3W4ERDTEDTRFY',
+    -> '2017-06-02 07:17:42');
+Query OK, 1 row affected (0.01 sec)
+
+
+
+
+mysql> INSERT INTO PELICULA VALUES(
+    -> 17,
+    -> 'AVENGERS END GAME',
+    -> '6',
+    -> '40');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PELICULA VALUES(
+    -> 18,
+    -> 'BREAKING BAD',
+    -> '6',
+    -> '35');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PELICULA VALUES(
+    -> 19,
+    -> 'EL HOYO',
+    -> '6',
+    -> '25');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PELICULA VALUES(
+    -> 20,
+    -> 'MAGIA EXTRAÑA',
+    -> '6',
+    -> '20');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PELICULA VALUES(
+    -> 21,
+    -> 'TOY STORY',
+    -> '6',
+    -> '30');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RENTA VALUES(
+    -> 22,
+    -> 13,
+    -> 21,
+    -> '2017-03-08',
+    -> NULL,
+    -> 'ENTREGADA');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RENTA VALUES(
+    -> 23,
+    -> 14,
+    -> 22,
+    -> '2017-03-08',
+    -> NULL,
+    -> 'ENTREGADA');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RENTA VALUES(
+    -> 24,
+    -> 15,
+    -> 23,
+    -> '2017-03-09',
+    -> NULL,
+    -> 'ENTREGADA');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO RENTA VALUES(
+    -> 25,
+    -> 16,
+    -> 24,
+    -> '2017-03-09',
+    -> NULL,
+    -> 'ENTREGADA');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO RENTA VALUES(
+    -> 21,
+    -> 12,
+    -> 20,
+    -> '2017-03-31',
+    -> NULL,
+    -> 'ENTREGADA');
+Query OK, 1 row affected (0.01 sec)
+
+
+mysql> update usuarios
+    -> set password='sistema32'
+    -> where id_usuario=8;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM PELICULA WHERE TIPO_PELICULA = 6;
++-------------+-------------------+---------------+-------+
+| id_pelicula | nombre_pelicula   | tipo_pelicula | costo |
++-------------+-------------------+---------------+-------+
+|           1 | El conjuro        |             6 |    30 |
+|           2 | El exorcista      |             6 |    20 |
+|           3 | Juego macabro     |             6 |    15 |
+|           4 | Halloween         |             6 |    15 |
+|           5 | El aro            |             6 |    15 |
+|           6 | El horfanato      |             6 |    20 |
+|          17 | AVENGERS END GAME |             6 |    40 |
+|          18 | BREAKING BAD      |             6 |    35 |
+|          19 | EL HOYO           |             6 |    25 |
+|          20 | MAGIA EXTRAÑA     |             6 |    20 |
+|          21 | TOY STORY         |             6 |    30 |
++-------------+-------------------+---------------+-------+
+11 rows in set (0.00 sec)
+
+select nombre_cliente, appat_cliente,apmat_cliente,fecnac_cliente,mail_cliente FROM CLIENTE WHERE COLONIA_CLIENTE='Balbuena';
+
+mysql> CREATE VIEW V_ClientesNoEntrega AS
+    -> SELECT c.nombre_cliente,
+    ->        c.appat_cliente,
+    ->        c.apmat_cliente,
+    ->        c.calle_cliente,
+    ->        c.numero_cliente,
+    ->        c.colonia_cliente
+    -> FROM cliente c
+    -> LEFT JOIN renta r ON c.id_cliente = r.id_cliente AND r.status = 'rentada'
+    -> WHERE r.id_cliente IS NULL;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE VIEW V_clienteRentasAccion AS
+    -> SELECT c.nombre_cliente,
+    ->        c.appat_cliente,
+    ->        c.apmat_cliente,
+    ->        c.calle_cliente,
+    ->        c.numero_cliente,
+    ->        c.colonia_cliente
+    -> FROM cliente c
+    -> JOIN renta r ON c.id_cliente = r.id_cliente
+    -> JOIN pelicula p ON r.id_pelicula = p.id_pelicula
+    -> WHERE p.tipo_pelicula = 2;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delete from cliente
+    -> where id_cliente=1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> UPDATE CLIENTE SET calle_cliente = 'Avenida Reforma',
+    -> numero_cliente ='1234',
+    -> colonia_cliente = 'Centro' WHERE id_cliente = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE renta SET status ='entregada',
+    -> fec_renta = '2017-04-04' WHERE id_renta = 25;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> DELETE FROM pelicula WHERE nombre_pelicula = 'THE NOTEBOOK';
+Query OK, 1 row affected (0.01 sec)

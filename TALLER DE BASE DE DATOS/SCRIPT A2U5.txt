@@ -1,0 +1,47 @@
+DELIMITER // 
+
+CREATE FUNCTION calcular_precio_total(costo DECIMAL(10, 2))
+RETURNS DECIMAL(10, 2)
+DETERMINISTIC
+BEGIN
+    DECLARE precio_total DECIMAL(10, 2);
+    SET precio_total = costo + (costo * 0.16);
+    RETURN precio_total;
+END 
+// 
+
+DELIMITER ;
+
+select nombre_pelicula,costo, calcular_precio_total(costo) as precio_total from pelicula;
+
+insert into cliente (id_cliente, nombre_cliente, appat_cliente, apmat_cliente, fecnac_cliente, mail_cliente, pass_cliente, calle_cliente, numero_cliente, colonia_cliente)
+values (
+50,
+'Juan Luis',
+'Cano', 
+'Ponce', 
+'2004-11-05', 
+'juanluisc599@gmail.com', 
+'12345678910', 
+'barrio de santiago', 
+'69', 
+'La Montañita');
+//
+
+update
+cliente
+set
+fecnac_cliente='2004-11-05',
+mail_cliente='juanluisc599@gmail.com',
+calle_cliente='barrio de santiago',
+    numero_cliente='69',
+    colonia_cliente='La Montañita'
+    where id_cliente= 50;
+    //
+
+select
+    nombre_cliente, appat_cliente, apmat_cliente, fecnac_cliente, mail_cliente, calle_cliente, numero_cliente, colonia_cliente
+    from cliente
+    where id_cliente=50;
+    //
+delete from cliente where id_cliente=50;

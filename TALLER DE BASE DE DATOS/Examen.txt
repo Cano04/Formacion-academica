@@ -1,0 +1,133 @@
+mysql> create database Transportes;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use transportes;
+Database changed
+mysql> create table Paquetes(
+    -> cod_paq int not null,
+    -> desc_paq varchar(100) not null,
+    -> dest_paq varchar(100) not null,
+    -> dir_paq varchar(100) not null,
+    -> cod_cam int not null,
+    -> cod_ciu int not null);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Ciudad(
+    -> cod_ciu int not null,
+    -> nom_ciu varchar(100) not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table Camionero(
+    -> cod_cam int not null,
+    -> nom_cam varchar(100) not null,
+    -> tel_cam varchar(100) not null,
+    -> dir_cam varchar(100) not null,
+    -> sal_cam double not null,
+    -> pob_cam varchar(100) not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table asignaciones(
+    -> cod_asi int not null,
+    -> cod_cam int not null,
+    -> cod_camion int not null);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table camiones(
+    -> cod_camion int not null,
+    -> pla_camion varchar(100) not null,
+    -> mod_camion varchar(100) not null,
+    -> tipo_camion varchar(100) not null,
+    -> pot_camion varchar(100) not null);
+Query OK, 0 rows affected (3.13 sec)
+
+mysql> alter table camiones add primary key(cod_camion);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table asignaciones add primary key(cod_asi);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table camionero add primary key(cod_cam);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table paquetes add primary key(cod_paq);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table ciudad add primary key(cod_ciu);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table asignaciones add foreign key(cod_camion) references camio
+nes(cod_camion);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table asignaciones add foreign key(cod_cam) references camionero(cod_cam);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table paquetes add foreign key(cod_ciu) references ciudad(cod_ciu);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table paquetes add foreign key(cod_cam) references camionero(co
+d_cam);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table paquetes drop dir_paq;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE paquetes add calle_paq VARCHAR(25) not null;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE paquetes add num_paq VARCHAR(5) not null;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE paquetes add col_paq VARCHAR(25) not null;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table camiones drop mod_camion;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table paquetes drop dest_paq;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table camionero drop pob_cam;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table camiones change pla_camion placa_camion varchar(10) not n
+ull;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> drop table asignaciones;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table camionero;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table camiones;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table paquetes;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table Ciudad;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> drop database transportes;
+Query OK, 0 rows affected (0.00 sec)

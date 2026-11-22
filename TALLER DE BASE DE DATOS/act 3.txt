@@ -1,0 +1,107 @@
+ create database Agencia;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use agencia;
+Database changed
+
+mysql> create table coche(
+    -> id_coche int(11) not null,
+    -> Modelo varchar(45) not null,
+    -> Placa varchar(45) not null,
+    -> color varchar(45) not null,
+    -> Version varchar(45) not null,
+    -> Marca varchar(45) not null,
+    -> tipo_poliza varchar(45) not null,
+    -> id_cliente varchar(45) not null,
+    -> id_accidentes varchar(45) not null,
+    -> id_poliza varchar(45) not null);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table accidentes(
+    -> id_accidente varchar(45) not null,
+    -> Hechos varchar(45) not null,
+    -> Lesionados varchar(45) not null,
+    -> Lugar varchar(45) NOT null,
+    -> Fecha date not null,
+    -> Hora date not null,
+    -> muertes varchar(45) not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table Clientes(
+    -> id_cliente varchar(45) not null,
+    -> nombre char(50) not null,
+    -> Apellido char(50) not null,
+    -> Direccion varchar(45) not null,
+    -> Telefono int(10) not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table Poliza(
+    -> id_poliza varchar(45) not null,
+    -> Nombre char(50) not null,
+    -> Monto int not null,
+    -> Descripcion varchar(45) not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> alter table coche add primary key(id_coche);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table clientes add primary key(id_cliente);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table poliza add primary key(id_poliza);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table accidentes add primary key (id_accidente);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table coche add foreign key(id_accidentes)
+    -> references accidentes(id_accidente);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table coche add foreign key(id_poliza)
+    -> references poliza(id_poliza);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table coche add foreign key(id_cliente)
+    -> references clientes(id_cliente);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table poliza drop nombre;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table poliza add column estatus Enum('activa' , 'inactiva') after descripcion;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table accidentes change lesionados num_heridos int not null;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table coche rename vehiculos;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> alter table poliza rename seguro;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table vehiculos;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table seguro;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table clientes;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table accidentes;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop database agencia;
+Query OK, 0 rows affected (0.01 sec)

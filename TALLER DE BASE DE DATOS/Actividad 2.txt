@@ -1,0 +1,90 @@
+mysql> GRANT USAGE ON *.* TO cano IDENTIFIED BY 'cano';
+
+mysql -h localhost -u cano -p ‘cano’
+
+SELECT CURRENT_USER();
+
+mysql> USE seguridad;
+
+mysql> DROP USER alumno;  
+
+mysql> GRANT SELECT (ID_CLIENTE, CLAVE,NOMBRE) ON Seguridad.CLIENTES TO cano
+              IDENTIFIED BY 'cano';
+mysql> SHOW GRANTS;
+SELECT * FROM CLIENTES; 
+mysql> SELECT ID_CLIENTE, CLAVE,NOMBRE FROM CLIENTES; 
+
+mysql> insert into clientes(
+    -> id_empleado, clave, nombre, rfc, domicilio, ciudad, estatus) values (
+    -> 5,
+    -> 'E005',
+    -> 'Sr de la Noche',
+    -> 'IEOT632611',
+    -> 'CARR RIO VERDE S/N',
+    -> 'SAN LUIS POTOSÍ',
+    -> 'LABORANDO');
+
+mysql> GRANT SELECT (ID_CLIENTE, CLAVE,NOMBRE), INSERT ON Seguridad.CLIENTES TO cano  IDENTIFIED BY 'cano';
+
+mysql> select * from clientes;
+
+mysql> REVOKE INSERT ON Seguridad.CLIENTES FROM cano;
+
+mysql> REVOKE SELECT(CLAVE) ON Seguridad.CLIENTES FROM cano;
+
+mysql> REVOKE ALL ON Seguridad.CLIENTES FROM cano;
+
+mysql> DROP USER cano;
+
+mysql> GRANT SELECT (ID_empleado, CLAVE,NOMBRE) ON Seguridad.empleados TO juaan IDENTIFIED BY 'juaan';
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> GRANT insert (ID_empleado, CLAVE,NOMBRE) ON Seguridad.empleados TO juaan IDENTIFIED BY 'juaan';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> GRANT insert (ID_empleado, CLAVE,NOMBRE,RFC,DOMICILIO,CIUDAD,ESTATUS) ON Seguridad.empleados TO juaan IDENTIFIED
+BY 'juaan';
+
+mysql> REVOKE INSERT ON Seguridad.empleados FROM juaan; 
+
+mysql> REVOKE ALL ON Seguridad.empleados FROM juaan;
+Query OK, 0 rows affected (0.00 sec)
+
+C:\>mysql -h localhost -u juaan -p
+
+show grants;
+
+mysql> use seguridad;
+
+mysql> SELECT ID_empleado, CLAVE,NOMBRE FROM empleados;
+
+mysql> insert into empleados(
+    -> id_empleado, clave, nombre, rfc, domicilio, ciudad, estatus) values (
+    -> 6,
+    -> 'E006',
+    -> 'Sr de la Noche',
+    -> 'IEOT632611',
+    -> 'CARR RIO VERDE S/N',
+    -> 'SAN LUIS POTOSÍ',
+    -> 'LABORANDO');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM EMPLEADOS;
+
+mysql> insert into empleados(
+    -> id_empleado, clave, nombre, rfc, domicilio, ciudad, estatus) values (
+    -> 6,
+    -> 'E006',
+    -> 'Sr de la Noche',
+    -> 'IEOT632611',
+    -> 'CARR RIO VERDE S/N',
+    -> 'SAN LUIS POTOSÍ',
+    -> 'LABORANDO');
+
+mysql> select *from empleados;
+
+
+
+
+
+

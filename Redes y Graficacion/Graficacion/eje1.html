@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ejercicio 1</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> 
+    </head>
+    <body>
+        <script>
+            // Escena
+            const scene = new THREE.Scene();
+
+            // Cámara
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100); //(fov, aspect, near, far)
+            camera.position.set(3, 3, 10);
+            camera.lookAt(0, 0, 0);
+
+            // Renderizador
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Ayuda de cuadrícula
+            const gridHelper = new THREE.GridHelper(10, 10);
+            scene.add(gridHelper);
+
+            // Crear puntos en vertical
+            const points = [];
+            const colors = [];
+            for (let i = 0; i < 10; i++) {
+                points.push(new THREE.Vector3(0, i * 0.5, 0)); // Set x to 0 and vary y
+                colors.push(new THREE.Color(`hsl(${(i / 10) * 360}, 100%, 50%)`));
+            }
+
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors.flatMap(c => c.toArray()), 3));
+
+            const material = new THREE.PointsMaterial({ size: 0.5, vertexColors: true });
+
+            const pointCloud = new THREE.Points(geometry, material);
+            scene.add(pointCloud);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+        </script>
+    </body>
+</html>

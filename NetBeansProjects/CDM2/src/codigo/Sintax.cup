@@ -1,0 +1,97 @@
+package codigo;
+
+import java_cup.runtime.*;
+import java.io.Reader;
+import java.util.*;
+
+parser code {:
+    private Symbol s;
+    public String resultado = "";
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+        resultado += "Error de sintaxis. No se esperaba el componente " + s.value + 
+                    " en la línea " + (s.right + 1) + ", columna " + (s.left + 1) + "\n";
+    }
+    
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        this.s = s;
+        resultado += "Error de sintaxis irrecuperable en la línea " + (s.right + 1) + 
+                    ", columna " + (s.left + 1) + ". No se pudo reconocer el componente " + s.value + "\n";
+    }
+:}
+
+// Terminales 
+terminal String TipoVariable, TipoConstante, TipoNulo, TipoGenerico;
+terminal String FuncionPrincipal, Importar, Clase, Ejecutar;
+terminal String InicioPrograma, FinPrograma;
+terminal String If, Else, While, For, DefFuncion, Return;
+terminal String Input, Output;
+terminal String BoolTrue, BoolFalse;
+terminal String Suma, Resta, Multiplicacion, Division, Modulo;
+terminal String Incremento, Decremento;
+terminal String IgualComparacion, Diferente, MenorIgual, MayorIgual, Menor, Mayor;
+terminal String And, Or, Not;
+terminal String Igual, SumaAsignacion, RestaAsignacion, MultiplicacionAsignacion, DivisionAsignacion;
+terminal String ParentesisAbre, ParentesisCierra, LlaveAbre, LlaveCierra;
+terminal String CorcheteAbre, CorcheteCierra, PuntoyComa, Coma, DosPuntos, Punto;
+terminal String Identificador, NumeroDecimal, NumeroEntero, Cadena;
+
+// No terminales 
+non terminal programa, sentencias, sentencia;
+non terminal declaracion, asignacion, llamada_funcion;
+non terminal expresion, termino, operador;
+
+// Precedencia de operadores
+precedence left Suma, Resta;
+precedence left Multiplicacion, Division, Modulo;
+
+// Símbolo inicial
+start with programa;
+
+// Reglas de producción 
+programa ::= InicioPrograma sentencias FinPrograma
+           | InicioPrograma FinPrograma
+           ;
+
+sentencias ::= sentencia sentencias
+             | sentencia
+             ;
+
+sentencia ::= declaracion
+            | asignacion
+            | llamada_funcion
+            ;
+
+// Declaraciones según tu gramática
+declaracion ::= TipoVariable Identificador
+              | TipoConstante Identificador
+              | TipoNulo Identificador
+              | TipoGenerico Identificador
+              ;
+
+// Asignaciones
+asignacion ::= Identificador Igual expresion
+             ;
+
+// Llamada a función principal
+llamada_funcion ::= Ejecutar ParentesisAbre FuncionPrincipal ParentesisCierra
+                  ;
+
+// Expresiones
+expresion ::= termino
+            | termino operador expresion
+            ;
+
+termino ::= Identificador
+          | NumeroEntero
+          | NumeroDecimal
+          | TipoNulo
+          | TipoGenerico
+          ;
+
+operador ::= Suma
+           | Resta  
+           | Multiplicacion
+           | Division
+           ;

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curvas en Three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body style="margin: 0; background-color: black;">
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(2, 0, 5);
+        camera.lookAt(0, 0, 0);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 'red' });
+        const whiteMaterial = new THREE.LineBasicMaterial({ color: 'white' });
+        
+        // Cuadro wireframe
+        const squareGeometry = new THREE.BoxGeometry(1, 1, 0.05);
+        const squareMaterial = new THREE.MeshBasicMaterial({ color: 'pink', wireframe: true });
+        const square = new THREE.Mesh(squareGeometry, squareMaterial);
+        scene.add(square);
+        
+        // Curva izquierda - se queda igual
+        const pointsLeft = [];
+        for (let t = -0.5; t <= 0.5; t += 0.05) {
+            pointsLeft.push(new THREE.Vector3(-0.7, t, Math.pow(t, 2) * 2)); // Acercada al cuadrado
+        }
+        scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsLeft), lineMaterial));
+        
+        // Curva derecha - ahora con la panza mirando hacia el cubo (valor negativo)
+        const pointsRight = [];
+        for (let t = -0.5; t <= 0.5; t += 0.05) {
+            pointsRight.push(new THREE.Vector3(0.7, t, -Math.pow(t, 2) * 2)); // Curva con panza hacia adentro
+        }
+        scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsRight), lineMaterial));
+        
+        // Curvas superior e inferior ajustadas para ser más curvas y tocar las esquinas del cubo
+        const pointsTop = [];
+        const pointsBottom = [];
+        
+        // Para calcular una parábola que pase por (-0.5,0.5), (0,0) y (0.5,0.5)
+        // Usamos la forma y = ax² + c, donde a = 2 para que pase por esos puntos
+        const curveFactor = 2;
+        
+        for (let x = -0.5; x <= 0.5; x += 0.02) { // Incremento más pequeño para curva más suave
+            // Curva superior: y = 2x² que pasa por (-0.5,0.5), (0,0) y (0.5,0.5)
+            pointsTop.push(new THREE.Vector3(x, curveFactor * Math.pow(x, 2), 0));
+            
+            // Curva inferior: y = -2x² que pasa por (-0.5,-0.5), (0,0) y (0.5,-0.5)
+            pointsBottom.push(new THREE.Vector3(x, -curveFactor * Math.pow(x, 2), 0));
+        }
+        
+        scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsTop), lineMaterial));
+        scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pointsBottom), lineMaterial));
+        
+        // Línea blanca en el centro
+        const centerLinePoints = [
+            new THREE.Vector3(-1, 0, 0),
+            new THREE.Vector3(1, 0, 0)
+        ];
+        const centerLineGeometry = new THREE.BufferGeometry().setFromPoints(centerLinePoints);
+        scene.add(new THREE.Line(centerLineGeometry, whiteMaterial));
+        
+        // Añadir plano blanco como en el ejemplo
+        const planeGeometry = new THREE.PlaneGeometry(3, 0.02);
+        const planeMaterial = new THREE.MeshBasicMaterial({ color: 0x08ff00 });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.position.set(0, 0, 0);
+        scene.add(plane);
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>

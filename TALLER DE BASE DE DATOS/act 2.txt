@@ -1,0 +1,58 @@
+ create table clientes(
+    -> ID_Clientes int(11) not null,
+    -> Nombre char(100) not null,
+    -> Apellido char(100) not null,
+    -> Domicilio char(100) not null,
+    -> Localidad char(100) not null,
+    -> Ciudad char(100) not null,
+    -> CP char(100) not null,
+    -> Telefono char(100) not null,
+    -> Compañia char(100) not null);
+
+
+mysql> create table Epresas(
+    -> ID_empresas int(11) not null,
+    -> Nombre char(100) not null,
+    -> Domicilio char(100) not null,
+    -> Localidad char(100) not null,
+    -> Ciudad char(100) not null,
+    -> CP char(100) not null,
+    -> Telefono char(100) not null,
+    -> Giro char(100) not null);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Empleados(
+    -> ID_Empleado int(11) not null,
+    -> Nombre char(100) not null,
+    -> Domicilio char(100) not null,
+    -> Telefono char(100) not null,
+    -> CP char(100) not null);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++---------------------------+
+| Tables_in_directorio_jlcp |
++---------------------------+
+| clientes                  |
+| empleados                 |
+| epresas                   |
++---------------------------+
+3 rows in set (0.00 sec)
+
+mysql> show tables;
++---------------------------+
+| Tables_in_directorio_jlcp |
++---------------------------+
+| clientes                  |
+| empleados                 |
+| epresas                   |
++---------------------------+
+3 rows in set (0.00 sec)
+
+mysql> desc select nombre from clientes;
+
+mysql> ALTER TABLE epresas modify Nombre varchar(100) not null;
+
+ALTER TABLE clientes CHANGE telefono tels VARCHAR(100);
+
+ALTER TABLE clientes modify nombre varchar(100) not null; 

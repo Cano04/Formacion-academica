@@ -1,0 +1,447 @@
+CREATE DATABASE Mecanico\g
+
+USE Mecanico\g
+
+CREATE TABLE Clientes
+     (
+     ID_CLIENTE           INT NOT NULL DEFAULT 0,
+     CLAVE                CHAR(4) NOT NULL,
+     NOMBRE               CHAR(255) NOT NULL,
+     DOMICILIO            CHAR(255) NOT NULL,
+     CIUDAD               CHAR(255),
+     ESTADO               CHAR(50) NOT NULL DEFAULT 'SAN LUIS POTOS?',
+     ESTATUS              ENUM('ALTA', 'BAJA') NOT NULL DEFAULT 'ALTA',
+     KEY (CLAVE),
+     KEY (ID_CLIENTE),
+     PRIMARY KEY (ID_CLIENTE)
+     )\g
+
+INSERT INTO Clientes
+VALUES (
+     1, 
+     'C001', 
+     'RODRIGO ESPARZA DUQUE', 
+     'AV. RICARDO B. ANAYA 1720', 
+     'SAN LUIS POTOS?', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     2, 
+     'C002', 
+     'GABRIEL LOPEZ AGUILAR', 
+     'DOM CONOCIDO', 
+     'CIUDAD VALLES', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     3, 
+     'C003', 
+     'ERNESTO TINAJERO VARGAS', 
+     'DOM. CONOCIDO', 
+     'TAMAZUNCHALE', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     4, 
+     'C004', 
+     'ALBERTO LARA SILVERIO', 
+     'AV. LOPEZ HEMOSA S/N', 
+     'TAMAZUNCHALE', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     5, 
+     'C005', 
+     'DANIEL LIRA ALVARADO', 
+     'AV. V CARRANZA', 
+     'SAN LUIS POTOS?', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     6, 
+     'C006', 
+     'ALBERTO LUNA LOPEZ', 
+     'MONTES APALACHES 240', 
+     'SAN LUIS POTOS?', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     7, 
+     'C007', 
+     'GILBERTO ALCANTARA TORRES', 
+     'RANCHO EJIDAL', 
+     'CIUDAD VALLES', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     8, 
+     'C008', 
+     'BENITO ESPINOZA NIETO', 
+     'AV. CACTUS 1562', 
+     'SOLEDAD DE GRACIANO SANCHEZ', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+INSERT INTO Clientes
+VALUES (
+     9, 
+     'C009', 
+     'RAQUEL OLMEDO LOPEZ', 
+     'ESTACION CATORCE 1450', 
+     'RIO VERDE', 
+     'SAN LUIS POTOS?', 
+     'ALTA' )\g
+
+
+CREATE TABLE Empleados
+     (
+     ID_EMPLEADO          INT NOT NULL DEFAULT 0,
+     CLAVE                CHAR(4) NOT NULL,
+     NOMBRE               CHAR(255) NOT NULL,
+     RFC                  CHAR(10),
+     DOMICILIO            CHAR(255) NOT NULL,
+     CIUDAD               CHAR(50) NOT NULL DEFAULT 'SAN LUIS POTOS?',
+     ESTATUS              ENUM('LABORANDO', 'DESPEDIDO') NOT NULL DEFAULT 'LABORANDO',
+     KEY (ID_EMPLEADO),
+     PRIMARY KEY (ID_EMPLEADO)
+     )\g
+
+INSERT INTO Empleados
+VALUES (
+     1, 
+     'E001', 
+     'MIGUEL ORTEGA GARCIA', 
+     'MGHF701206', 
+     'AV. UNIVERSIDAD 1860', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     2, 
+     'E002', 
+     'JOSE LUIS GOVEA SALAZAR', 
+     'JKTG750125', 
+     'AV. HIMNO NACIONAL 4520', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     3, 
+     'E003', 
+     'JAVIER ARTEAGA SANTOS', 
+     'DFGT650321', 
+     'FRANCIA 480', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     4, 
+     'E004', 
+     'EDGAR LOPEZ ALVAREZ', 
+     'ELAD771105', 
+     'CARR RIO VERDE S/N', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+INSERT INTO Empleados
+VALUES (
+     5, 
+     'E005', 
+     'IVAN ESTRADA ONTIVEROS', 
+     'IEOT800611', 
+     'AV. INDUSTRIAS 1230', 
+     'SAN LUIS POTOS?', 
+     'LABORANDO' )\g
+
+
+CREATE TABLE OrdenTrabajo
+     (
+     ID_OT                INT NOT NULL DEFAULT 0,
+     ID_CLIENTE           INT NOT NULL DEFAULT 0,
+     ID_EMPLEADO          INT NOT NULL DEFAULT 0,
+     CLAVE_OT             CHAR(4) NOT NULL,
+     AUTO                 CHAR(255) NOT NULL,
+     FALLA                CHAR(255),
+     FECHA_SOLICITUD      DATE,
+     PRECIO_FINAL         DOUBLE(15,2) DEFAULT '0.00',
+     ESTATUS              ENUM('ABIERTA', 'CERRADA') NOT NULL DEFAULT 'ABIERTA',
+     PRIMARY KEY (ID_OT),
+     INDEX (ID_CLIENTE,ID_EMPLEADO),
+     FOREIGN KEY (ID_CLIENTE) REFERENCES CLIENTES(ID_CLIENTE),
+     FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADOS(ID_EMPLEADO)
+     ON UPDATE CASCADE ON DELETE RESTRICT
+     )\g
+
+INSERT INTO OrdenTrabajo VALUES
+(1,1,1,'001','CHEVY POP','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+
+INSERT INTO OrdenTrabajo VALUES
+(2,2,2,'002','VW','Afinacion','2007-05-03',DEFAULT,DEFAULT)\g
+
+INSERT INTO OrdenTrabajo VALUES
+(3,3,3,'003','JETTA','Carburador','2007-05-03',DEFAULT,DEFAULT)\g
+
+show tables;
+
+desc clientes;
+
+desc empleados;
+
+desc ordentrabajo;
+
+mysql> insert into Clientes values(
+    -> 10,
+    ->      'C010',
+    ->      'DIEGO ARMANDO JASSO',
+    ->      'ESTACION CATORCE 1450',
+    ->      'RIO VERDE',
+    ->      'SAN LUIS POTOS?',
+    ->      'ALTA' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Clientes values(
+    -> 11,
+    ->      'C011',
+    ->      'MOISES LOPEZ JASSO',
+    ->      'ESTACION CATORCE 1450',
+    ->      'RIO VERDE',
+    ->      'SAN LUIS POTOS?',
+    ->      'BAJA' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Clientes values(
+    -> 12,
+    ->      'C012',
+    ->      'SAMUEL CARRETO',
+    ->      'ESTACION CATORCE 1450',
+    ->      'POZOS',
+    ->      'SAN LUIS POTOS?',
+    ->      'BAJA' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Clientes values(
+    -> 13,
+    ->      'C013',
+    ->      'JUAN DIEGO',
+    ->      'ESTACION CATORCE 1450',
+    ->      'VILLA DE REYES',
+    ->      'SAN LUIS POTOS?',
+    ->      'BAJA' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Clientes values(
+    -> 14,
+    ->      'C014',
+    ->      'lUIS ANGEL MOLINA',
+    ->      'ESTACION CATORCE 1450',
+    ->      'VILLA DE REYES',
+    ->      'SAN LUIS POTOS?',
+    ->      'ALTA' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Clientes values(
+    -> 15,
+    ->      'C015',
+    ->      'ALAN SANTIAGO',
+    ->      'ESTACION CATORCE 1450',
+    ->      'VILLA DE REYES',
+    ->      'SAN LUIS POTOS?',
+    ->      'ALTA' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 6,
+    ->      'E006',
+    ->      'ALAN SANTIAGO',
+    ->      'IEOT800611',
+    ->  'AV. INDUSTRIAS 1230',
+    ->      'SAN LUIS POTOS?',
+    ->      'LABORANDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 7,
+    ->      'E007',
+    ->      'DIEGO ARMANDO',
+    ->      'IEOT800646',
+    ->      'LA PILA',
+    ->      'SAN LUIS POTOS?',
+    ->      'DESPEDIDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 8,
+    ->      'E008',
+    ->      'MOISES LOPEZ',
+    ->      'IEOT800456',
+    ->      'SATELITE',
+    ->      'SAN LUIS POTOS?',
+    ->      'DESPEDIDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 9,
+    ->      'E009',
+    ->      'URIEL LOPEZ',
+    ->      'IEOT800794',
+    ->      'LOMAZ',
+    ->      'SAN LUIS POTOS?',
+    ->      'DESPEDIDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 10,
+    ->      'E010',
+    ->      'JONATHAN GUADALUPE',
+    ->      'IEOT807569',
+    ->      'LOMAZ',
+    ->      'SAN LUIS POTOS?',
+    ->      'DESPEDIDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 11,
+    ->      'E011',
+    ->      'DIANA ISABEL',
+    ->      'IEOT807197',
+    ->      'SANTA MARIA DEL RIO',
+    ->      'SAN LUIS POTOS?',
+    ->      'LABORANDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 12,
+    ->      'E012',
+    ->      'ANDREA ORTA',
+    ->      'IEOT807879',
+    ->      'SANTA MARIA DEL RIO',
+    ->      'SAN LUIS POTOS?',
+    ->      'LABORANDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 13,
+    ->      'E013',
+    ->      'JUAN JESUS',
+    ->      'IEOT801578',
+    ->      'SANTA MARIA DEL RIO',
+    ->      'SAN LUIS POTOS?',
+    ->      'LABORANDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 14,
+    ->      'E014',
+    ->      'ALEXIA MARTINEZ',
+    ->      'IEOT801010',
+    ->      'SANTA MARIA DEL RIO',
+    ->      'SAN LUIS POTOS?',
+    ->      'LABORANDO' )\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Empleados values(
+    -> 15,
+    ->  'E015',
+    ->  'JAVIER RIVERA RIOS',
+    ->  'IE0T801823',
+    ->  'SANTA MARIA DEL RIO',
+    ->  'SAN LUIS POTOSI',
+    ->  'LABORANDO')\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 4,4,4,'004','SPARK BOLITA','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 5,5,5,'005','MARCH','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 6,6,6,'006','SENTRA 2004','Servicio','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 7,7,7,'007','GTR35','CAMBIO DE ACEITE','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 8,8,8,'008','BMW','SERVICIO','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 9,9,9,'009','PORCHE 2001','CAMBIO DE ACEITE','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 10,10,10,'010','MERCEDES','CAMBIO DE ACEITE','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 11,11,11,'011','JEEP CLASE G','SERVICO','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 12,12,12,'012','LAMBORGHINI AVENTADOR','SERVICO','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 13,13,13,'013','MACLAREN','SERVICO','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 14,14,14,'014','CHOPER HARLEY DAVIDSON','SERVICO','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO OrdenTrabajo VALUES(
+    -> 15,15,15,'015','MORTALIKA 250Z','SERVICO','2007-05-03',DEFAULT,DEFAULT)\g
+Query OK, 1 row affected (0.01 sec)
+
+mysql> UPDATE EMPLEADOS SET NOMBRE = 'CESAR AUGUSTO VILLELA MUÑOZ' WHERE ID_EMPLEADO = 5;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLEADOS SET ESTATUS = 'DESPEDIDO' WHERE ID_EMPLEADO = 4;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLEADOS SET ESTATUS = 'DESPEDIDO' WHERE ID_EMPLEADO = 5;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE EMPLEADOS SET ESTATUS = 'DESPEDIDO' WHERE ID_EMPLEADO = 6;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM CLIENTES WHERE CIUDAD='SOLEDAD DE GRACIANO SANCHEZ';
+
+mysql> SELECT CLAVE, NOMBRE, RFC FROM EMPLEADOS WHERE ESTATUS='DESPEDIDO' ORDER BY NOMBRE;
+
+select *from ordentrabajo where year(fecha_solicitud)=2007;
+
+update ordentrabajo set estatus='Cerrada' where year(fecha_solicitud)=2007;
+
+mysql> select e.Nombre, e.Domicilio from empleados e join ordentrabajo ot On e.Id_empleado= ot.Id_empleado
+    -> where ot.auto='Chevy pop';
+
+mysql> select c.Nombre, e.Nombre, 50 As Cargo_extra from clientes c join ordentrabajo ot On c.Id_cliente= ot.Id_cliente join empleados e on ot.Id_empleado =e.Id_empleado
+    -> where e.Nombre ='Miguel Ortega Garcia';
+
+

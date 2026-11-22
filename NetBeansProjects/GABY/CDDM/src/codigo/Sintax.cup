@@ -1,0 +1,152 @@
+package codigo;
+
+import java_cup.runtime.*;
+import java.io.Reader;
+import java.util.*;
+import codigo.sematico.*;
+
+parser code {:
+    private Symbol s;
+    public String resultado = "";
+
+    // --- INSTANCIAS PARA SEMÁNTICA ---
+    public TablaSimbolos tabla = new TablaSimbolos();
+    public AnalizadorSemantico semantico = new AnalizadorSemantico(tabla);
+
+    // --- MANEJO DE ERRORES SINTÁCTICOS ---
+    @Override
+    public void syntax_error(Symbol s){
+        this.s = s;
+        String mensaje = "Error de sintaxis en línea " + (s.right + 1) + 
+                         ", columna " + (s.left + 1) + ". ";
+        if(s.value != null){
+            mensaje += "Token inesperado: '" + s.value + "'. ";
+        }
+        mensaje += sugerirCorreccion(s);
+        resultado += mensaje + "\n";
+        System.err.println(mensaje);
+    }
+
+    private String sugerirCorreccion(Symbol s){
+        String token = (s.value != null) ? s.value.toString() : "";
+        if(token.equals("Eje")) {
+            return "¿Falta declarar variables antes de la llamada a función?";
+        }
+        if(token.matches("[0-9]+[a-zA-Z]+")) {
+            return "Posible error: mezcla de número y letra sin reglas claras.";
+        }
+        return "Revisa el orden y la estructura de la expresión.";
+    }
+
+    @Override
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+        System.err.println("Error irrecuperable en línea " + (s.right + 1));
+        throw new Exception("Análisis detenido por error grave.");
+    }
+:};
+
+// =======================================
+// TERMINALES
+// =======================================
+terminal InicioPrograma, FinPrograma;
+terminal TipoVariable, TipoConstante, TipoNulo, TipoGenerico;
+terminal Ejecutar, FuncionPrincipal;
+terminal Input, Output;
+terminal Suma, Resta, Multiplicacion, Division;
+terminal Igual;
+terminal ParentesisAbre, ParentesisCierra;
+terminal Identificador, NumeroEntero, NumeroDecimal, Cadena;
+
+// =======================================
+// NO TERMINALES
+// =======================================
+non terminal programa;
+non terminal lista_sentencias;
+non terminal sentencia;
+non terminal declaracion;
+non terminal asignacion;
+non terminal expresion;
+non terminal llamada_funcion;
+non terminal salida;
+
+// =======================================
+// SÍMBOLO INICIAL
+// =======================================
+start with programa;
+
+// =======================================
+// REGLAS DE PRODUCCIÓN CORREGIDAS
+// =======================================
+
+programa ::= InicioPrograma lista_sentencias FinPrograma
+            {: 
+                System.out.println("✅ Programa analizado correctamente.");
+                System.out.println("Tabla de símbolos:");
+                System.out.println(tabla.toString());
+            :}
+            ;
+
+lista_sentencias ::= sentencia lista_sentencias
+                    | sentencia
+                    | 
+                    ;
+
+sentencia ::= declaracion
+            | asignacion
+            | llamada_funcion
+            | salida
+            ;
+
+declaracion ::= TipoVariable Identificador
+                {: 
+                    semantico.declararVariable($2.toString(), "Vill");
+                    System.out.println("✅ Declarada variable: " + $2.toString());
+                :}
+              | TipoConstante Identificador
+                {: 
+                    semantico.declararVariable($2.toString(), "Con");
+                    System.out.println("✅ Declarada constante: " + $2.toString());
+                :}
+              | TipoNulo Identificador
+                {: 
+                    semantico.declararVariable($2.toString(), "Nad");
+                    System.out.println("✅ Declarada variable nula: " + $2.toString());
+                :}
+              | TipoGenerico Identificador
+                {: 
+                    semantico.declararVariable($2.toString(), "Gen");
+                    System.out.println("✅ Declarada variable genérica: " + $2.toString());
+                :}
+              ;
+
+asignacion ::= Identificador:var Igual expresion:exp
+                {:
+                    semantico.validarAsignacion($var.toString(), $exp);
+                    System.out.println("✅ Asignación válida: " + $var.toString() + " = " + $exp);
+                :}
+              ;
+
+llamada_funcion ::= Ejecutar ParentesisAbre FuncionPrincipal ParentesisCierra
+                    {: 
+                        System.out.println("✅ Llamada a función reconocida: Eje(Capivara)");
+                    :}
+                  ;
+
+salida ::= Output ParentesisAbre expresion ParentesisCierra
+          {: 
+              System.out.println("✅ Salida reconocida: Escribir(...)");
+          :}
+        ;
+
+expresion ::= expresion Suma expresion
+            | expresion Resta expresion
+            | expresion Multiplicacion expresion
+            | expresion Division expresion
+            | termino
+            ;
+
+termino ::= Identificador
+          | NumeroEntero
+          | NumeroDecimal
+          | ParentesisAbre expresion ParentesisCierra
+          ;

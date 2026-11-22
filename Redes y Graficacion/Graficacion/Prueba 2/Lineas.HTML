@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ejemplo</title>
+    <style>
+        canvas {
+            border: thin solid black;
+            background-color: black; /* Set background color to black */
+            width: 100%; /* Fill the entire width */
+            height: 100%; /* Fill the entire height */
+        }
+        body, html {
+            margin: 0; /* Remove default margins */
+            padding: 0; /* Remove default padding */
+            height: 100%; /* Ensure body takes full height */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+
+        Su navegador no es compatible con el elemento <code>canvas</code>
+    </canvas>
+    <script>
+        var canvasElem = document.getElementById("canvas");
+        var ctx = canvasElem.getContext("2d");
+        var point1 = [window.innerWidth / 2, window.innerHeight / 2]; // Centered point
+
+        var point2 = [400, 10]; // Adjusted for curve
+        var point3 = [400, 130]; // Adjusted for curve
+        draw();
+        canvasElem.onmousemove = function (e) {
+            if (e.ctrlKey) {
+                point1 = [e.clientX, e.clientY];
+            } else if(e.shiftKey) {
+                point2 = [e.clientX, e.clientY];    
+            } else {
+                point3 = [e.clientX, e.clientY];
+            }
+            ctx.clearRect(0, 0, canvasElem.width, canvasElem.height);
+            draw();
+        }
+        function draw() {
+            ctx.fillStyle = "yellow"; // Set stroke color to yellow for visibility
+            ctx.strokeStyle = "yellow"; // Set stroke color to yellow for visibility
+            ctx.lineWidth = 4;
+            
+            ctx.beginPath();
+            ctx.moveTo(point1[0], point1[1]);
+            ctx.arcTo(point2[0], point2[1], point3[0], point3[1], 50);
+            ctx.stroke();
+            
+            drawPoint(point1[0], point1[1]);
+            drawPoint(point2[0], point2[1]);
+            drawPoint(point3[0], point3[1]);
+            
+            ctx.beginPath();
+            ctx.moveTo(point1[0], point1[1]);
+            ctx.lineTo(point2[0], point2[1]);
+            ctx.lineTo(point3[0], point3[1]);
+            ctx.stroke();
+        }
+        
+        function drawPoint(x, y) {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "red";
+            ctx.strokeRect(x - 2, y - 2, 4, 4);
+        }
+    </script>
+</body>
+</html>
